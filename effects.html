@@ -573,10 +573,31 @@
       border-top: 1px solid var(--line);
     }
 
+    .mini-galaxy::before {
+      background:
+        radial-gradient(circle at 22% 42%, #f4f0e7 0 2px, transparent 3px),
+        radial-gradient(circle at 58% 28%, #f4c15d 0 2px, transparent 3px),
+        radial-gradient(circle at 78% 62%, #7db7ff 0 2px, transparent 3px),
+        linear-gradient(25deg, transparent 26%, rgba(125,183,255,.16) 34%, rgba(244,240,231,.72) 49%, rgba(79,208,176,.18) 61%, transparent 72%);
+      animation: galaxyDrift 3.6s ease-in-out infinite alternate;
+    }
+
+    .mini-galaxy::after {
+      width: 20px;
+      height: 20px;
+      left: 58%;
+      top: 38%;
+      background: #f4c15d;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 56%, 79% 91%, 50% 70%, 21% 91%, 32% 56%, 2% 35%, 39% 35%);
+      filter: drop-shadow(0 0 12px rgba(244,193,93,.78));
+      animation: starTwinkle 1.8s ease-in-out infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes drift { to { transform: translate(12px, -8px) scale(1.08); } }
     @keyframes pulse { 50% { transform: scale(1.16); opacity: .72; } }
     @keyframes floaty { to { transform: translateY(-8px) scale(1.05); } }
+    @keyframes galaxyDrift { to { transform: translateX(12px) translateY(-5px) scale(1.06); } }
+    @keyframes starTwinkle { 50% { transform: rotate(24deg) scale(1.18); opacity: .68; } }
     @keyframes pulseDot { 50% { opacity: .42; transform: scale(.7); } }
 
     .sunrise-demo {
@@ -760,7 +781,11 @@
           <h3>Click 爆发</h3>
           <p>点击舞台产生彩色粒子，适合按钮反馈、庆祝效果和节日彩蛋。</p>
         </button>
-        <button class="effect-card" type="button" data-effect="constellation" role="listitem">
+        <button class="effect-card" type="button" data-effect="galaxy" role="listitem">
+          <div class="thumb mini-galaxy" aria-hidden="true"></div>
+          <h3>Galaxy 星河线</h3>
+          <p>星点沿银河弧线流动，五角星闪烁旋转，鼠标会轻微牵引线带。</p>
+        </button>        <button class="effect-card" type="button" data-effect="constellation" role="listitem">
           <div class="thumb mini-constellation" aria-hidden="true"></div>
           <h3>Constellation 星图</h3>
           <p>节点自动连线并跟随鼠标变化，适合个人首页和数据类展示。</p>
@@ -799,6 +824,13 @@
       </article>
       <div class="works">
         <article class="work-card">
+          <div class="work-visual galaxy-line" aria-hidden="true"></div>
+          <div class="work-body">
+            <h3>星河线动画</h3>
+            <p>用 Canvas 绘制流动的银河线带，加入闪烁五角星点缀，适合视觉主页、节日页和作品封面。</p>
+            <div class="work-meta"><span class="tag">Galaxy</span><span class="tag">五角星</span><span class="tag">Canvas 动画</span></div>
+          </div>
+        </article>        <article class="work-card">
           <div class="work-visual canvas-kit" aria-hidden="true"></div>
           <div class="work-body">
             <h3>Canvas 动画组件库</h3>
@@ -898,6 +930,7 @@
       grid: ["Magnetic 网格", "鼠标靠近时网格产生吸附和漂移。"],
       wave: ["Liquid 波纹", "多层曲线叠加出柔和流动感。"],
       burst: ["Click 爆发", "点击舞台触发彩色粒子扩散。"],
+      galaxy: ["Galaxy 星河线", "星点沿弧形银河线带流动，五角星闪烁旋转。"],
       constellation: ["Constellation 星图", "节点自动连线，并跟随鼠标生成视觉重心。"]
     };
 
@@ -908,6 +941,7 @@
     let pointer = { x: .5, y: .5, active: false };
     let bursts = [];
     let stars = [];
+    let galaxyStars = [];
 
     document.querySelector("#year").textContent = new Date().getFullYear();
     const sunriseCanvas = document.querySelector("#sunriseSketch");
@@ -1075,8 +1109,25 @@
       canvas.height = Math.floor(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       createStars();
+      createGalaxyStars();
     }
 
+
+    function createGalaxyStars() {
+      const count = Math.max(90, Math.floor((width * height) / 5200));
+      galaxyStars = Array.from({ length: count }, (_, index) => {
+        const lane = index % 5;
+        return {
+          offset: index / count,
+          lane,
+          speed: .0008 + (index % 7) * .00018,
+          size: 1.1 + (index % 5) * .45,
+          twinkle: index * .73,
+          color: ["#f4f0e7", "#f4c15d", "#7db7ff", "#4fd0b0"][index % 4],
+          star: index % 13 === 0
+        };
+      });
+    }
     function createStars() {
       const count = Math.max(34, Math.floor((width * height) / 9800));
       stars = Array.from({ length: count }, (_, index) => ({
@@ -1208,6 +1259,88 @@
       }
     }
 
+
+    function drawFivePointStar(context, x, y, outer, inner, rotation, color, alpha) {
+      context.save();
+      context.translate(x, y);
+      context.rotate(rotation);
+      context.globalAlpha = alpha;
+      context.fillStyle = color;
+      context.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const radius = i % 2 === 0 ? outer : inner;
+        const angle = -Math.PI / 2 + i * Math.PI / 5;
+        const px = Math.cos(angle) * radius;
+        const py = Math.sin(angle) * radius;
+        if (i === 0) context.moveTo(px, py);
+        else context.lineTo(px, py);
+      }
+      context.closePath();
+      context.fill();
+      context.restore();
+      context.globalAlpha = 1;
+    }
+
+    function galaxyPoint(t, laneOffset = 0) {
+      const x = width * (.07 + t * .86);
+      const curve = Math.sin((t - .12) * Math.PI) * height * .24;
+      const wave = Math.sin(t * Math.PI * 4 + time * .75) * 12;
+      const y = height * .62 - curve + laneOffset + wave;
+      const mx = pointer.active ? (pointer.x - .5) * 36 * Math.sin(t * Math.PI) : 0;
+      const my = pointer.active ? (pointer.y - .5) * 28 * Math.sin(t * Math.PI) : 0;
+      return { x: x + mx, y: y + my };
+    }
+
+    function drawGalaxy() {
+      clear();
+      const bg = ctx.createRadialGradient(width * .5, height * .42, 10, width * .5, height * .42, Math.max(width, height) * .72);
+      bg.addColorStop(0, "rgba(125,183,255,.16)");
+      bg.addColorStop(.36, "rgba(79,208,176,.06)");
+      bg.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, width, height);
+
+      for (let band = 0; band < 9; band++) {
+        const lane = (band - 4) * 8;
+        ctx.beginPath();
+        for (let i = 0; i <= 130; i++) {
+          const t = i / 130;
+          const point = galaxyPoint(t, lane + Math.sin(t * Math.PI * 2 + band) * 8);
+          if (i === 0) ctx.moveTo(point.x, point.y);
+          else ctx.lineTo(point.x, point.y);
+        }
+        ctx.strokeStyle = band % 3 === 0 ? "rgba(244,240,231,.25)" : band % 3 === 1 ? "rgba(125,183,255,.18)" : "rgba(79,208,176,.16)";
+        ctx.lineWidth = Math.max(.8, 3.8 - Math.abs(band - 4) * .45);
+        ctx.stroke();
+      }
+
+      galaxyStars.forEach((star, index) => {
+        star.offset = (star.offset + star.speed) % 1;
+        const lane = (star.lane - 2) * 18 + Math.sin(time + index) * 7;
+        const point = galaxyPoint(star.offset, lane);
+        const alpha = .45 + Math.sin(time * 3 + star.twinkle) * .28;
+        if (star.star) {
+          drawFivePointStar(ctx, point.x, point.y, 8 + star.size * 1.8, 3.5 + star.size, time * .8 + index, star.color, Math.max(.32, alpha));
+          ctx.shadowColor = star.color;
+          ctx.shadowBlur = 14;
+          drawFivePointStar(ctx, point.x, point.y, 4.8 + star.size, 2 + star.size * .5, -time + index, "#f4f0e7", .45);
+          ctx.shadowBlur = 0;
+        } else {
+          ctx.globalAlpha = Math.max(.22, alpha);
+          ctx.fillStyle = star.color;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, star.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      for (let i = 0; i < 11; i++) {
+        const t = (i / 10 + time * .035) % 1;
+        const point = galaxyPoint(t, Math.sin(i) * 26);
+        drawFivePointStar(ctx, point.x, point.y, 12 + Math.sin(time * 2 + i) * 2, 5, time * .7 + i, i % 2 ? "#f4c15d" : "#7db7ff", .78);
+      }
+    }
     function drawConstellation() {
       clear();
       const mx = pointer.x * width;
@@ -1252,6 +1385,7 @@
       if (effect === "grid") drawGrid();
       if (effect === "wave") drawWave();
       if (effect === "burst") drawBurst();
+      if (effect === "galaxy") drawGalaxy();
       if (effect === "constellation") drawConstellation();
       requestAnimationFrame(frame);
     }
