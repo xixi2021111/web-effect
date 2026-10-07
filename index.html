@@ -3,54 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>个人主页 | Web 动画实验室</title>
+  <title>Web Effect Lab | 个人动画作品集</title>
+  <meta name="description" content="一个用于 GitHub Pages 展示的个人主页，包含可交互的 Web 动画效果、项目卡片和个人介绍。">
   <style>
     :root {
       color-scheme: dark;
-      --bg: #101214;
-      --panel: #181c20;
-      --panel-2: #20262b;
-      --text: #f3f0e8;
-      --muted: #aeb7b6;
+      --bg: #0f1114;
+      --bg-2: #14191d;
+      --panel: #181d21;
+      --panel-strong: #20272c;
+      --text: #f4f0e7;
+      --muted: #aab6b4;
       --line: rgba(255,255,255,.12);
-      --accent: #53d1b6;
-      --accent-2: #ffcc66;
-      --accent-3: #f26b6b;
-      --shadow: 0 18px 50px rgba(0,0,0,.3);
+      --green: #4fd0b0;
+      --gold: #f4c15d;
+      --coral: #ef6b62;
+      --sky: #7db7ff;
+      --shadow: 0 24px 70px rgba(0,0,0,.34);
     }
 
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
       background:
-        linear-gradient(120deg, rgba(83,209,182,.12), transparent 30%),
-        linear-gradient(300deg, rgba(242,107,107,.12), transparent 28%),
-        var(--bg);
+        linear-gradient(120deg, rgba(79,208,176,.13), transparent 28%),
+        linear-gradient(300deg, rgba(239,107,98,.12), transparent 24%),
+        linear-gradient(180deg, #0f1114 0%, #12161a 48%, #0f1114 100%);
       color: var(--text);
     }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.65), transparent 80%);
+    }
+
     button, input { font: inherit; }
+    a { color: inherit; }
 
     .shell {
       width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
     }
 
-    .hero {
-      min-height: 92vh;
-      display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(320px, 1.05fr);
-      gap: 42px;
-      align-items: center;
-      padding: 42px 0 28px;
-    }
-
     .nav {
       position: fixed;
-      z-index: 20;
+      z-index: 30;
       top: 16px;
       left: 50%;
       transform: translateX(-50%);
@@ -58,52 +66,93 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 18px;
       padding: 10px 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: rgba(16,18,20,.72);
-      backdrop-filter: blur(14px);
+      background: rgba(15,17,20,.78);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.22);
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 800;
-      letter-spacing: 0;
+      min-width: 0;
+      font-weight: 850;
     }
 
     .mark {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 auto;
       border-radius: 7px;
-      background: conic-gradient(from 120deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
-      box-shadow: 0 0 24px rgba(83,209,182,.28);
+      background: conic-gradient(from 130deg, var(--green), var(--gold), var(--coral), var(--sky), var(--green));
+      box-shadow: 0 0 26px rgba(79,208,176,.28);
     }
 
-    .nav a {
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .links a {
       color: var(--muted);
       text-decoration: none;
       padding: 8px 10px;
       border-radius: 7px;
+      white-space: nowrap;
     }
 
-    .nav a:hover { color: var(--text); background: rgba(255,255,255,.08); }
+    .links a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.08);
+    }
+
+    .hero {
+      min-height: 94vh;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(360px, 1.1fr);
+      gap: 42px;
+      align-items: center;
+      padding: 98px 0 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+      animation: pulseDot 1.7s ease-in-out infinite;
+    }
 
     h1 {
       margin: 0;
-      max-width: 720px;
-      font-size: clamp(42px, 7vw, 86px);
-      line-height: .94;
+      max-width: 760px;
+      font-size: clamp(44px, 7vw, 88px);
+      line-height: .95;
       letter-spacing: 0;
     }
 
     .lead {
       max-width: 620px;
-      margin: 22px 0 0;
+      margin: 24px 0 0;
       color: var(--muted);
       font-size: 18px;
-      line-height: 1.75;
+      line-height: 1.78;
     }
 
     .hero-actions {
@@ -114,34 +163,69 @@
     }
 
     .btn {
+      min-height: 44px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px;
+      gap: 8px;
       padding: 0 18px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      color: var(--text);
       background: var(--panel);
+      color: var(--text);
       text-decoration: none;
       cursor: pointer;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(79,208,176,.55);
+      background: var(--panel-strong);
     }
 
     .btn.primary {
-      background: var(--accent);
+      background: var(--green);
       color: #07110f;
       border-color: transparent;
-      font-weight: 800;
+      font-weight: 850;
     }
 
-    .showcase {
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 34px;
+      max-width: 600px;
+    }
+
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(24,29,33,.72);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 24px;
+      color: var(--text);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stage-wrap {
       position: relative;
-      aspect-ratio: 1 / 1;
-      min-height: 390px;
+      min-height: 520px;
       border: 1px solid var(--line);
       border-radius: 8px;
       overflow: hidden;
-      background: #0b0d0f;
+      background: #090c0f;
       box-shadow: var(--shadow);
     }
 
@@ -149,58 +233,86 @@
       display: block;
       width: 100%;
       height: 100%;
+      min-height: 520px;
     }
 
-    .stage-label {
+    .stage-panel {
       position: absolute;
       left: 16px;
+      right: 16px;
       bottom: 16px;
       display: flex;
-      gap: 8px;
       align-items: center;
-      padding: 10px 12px;
-      border-radius: 8px;
-      background: rgba(16,18,20,.72);
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
       border: 1px solid var(--line);
-      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      background: rgba(15,17,20,.76);
+      backdrop-filter: blur(14px);
+    }
+
+    .stage-title {
+      min-width: 0;
+    }
+
+    .stage-title strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .stage-title span {
+      display: block;
+      margin-top: 2px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 18px var(--accent);
+    .stage-tools {
+      display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
     }
 
-    main {
-      padding-bottom: 70px;
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      cursor: pointer;
     }
 
-    section {
-      padding: 72px 0 0;
-    }
+    .icon-btn:hover { background: rgba(255,255,255,.12); }
+
+    main { padding-bottom: 72px; }
+    section { padding: 76px 0 0; }
 
     .section-head {
       display: flex;
       align-items: end;
       justify-content: space-between;
       gap: 20px;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     h2 {
       margin: 0;
-      font-size: 30px;
+      font-size: 32px;
       letter-spacing: 0;
     }
 
     .hint {
       margin: 0;
+      max-width: 560px;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     .effects {
@@ -210,7 +322,7 @@
     }
 
     .effect-card {
-      min-height: 180px;
+      min-height: 210px;
       padding: 16px;
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -218,25 +330,65 @@
       color: var(--text);
       text-align: left;
       cursor: pointer;
-      transition: transform .22s ease, border-color .22s ease, background .22s ease;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
     }
 
     .effect-card:hover,
     .effect-card.active {
       transform: translateY(-4px);
-      border-color: rgba(83,209,182,.75);
-      background: var(--panel-2);
+      border-color: rgba(79,208,176,.75);
+      background: var(--panel-strong);
     }
 
     .thumb {
       position: relative;
-      height: 88px;
+      height: 96px;
+      border: 1px solid var(--line);
       border-radius: 7px;
       margin-bottom: 14px;
-      background: #0c0f12;
+      background: #0b0f12;
       overflow: hidden;
-      border: 1px solid var(--line);
+    }
+
+    .thumb::before,
+    .thumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    .mini-orbit::before {
+      background: radial-gradient(circle at 50% 50%, var(--green) 0 5px, transparent 6px), conic-gradient(from 0deg, transparent, rgba(79,208,176,.7), transparent 36%);
+      animation: spin 3s linear infinite;
+    }
+
+    .mini-grid::before {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(244,193,93,.7), transparent 36%);
+      background-size: 18px 18px, 18px 18px, 100% 100%;
+      animation: drift 3s ease-in-out infinite alternate;
+    }
+
+    .mini-wave::before {
+      background: repeating-radial-gradient(circle at 20% 50%, rgba(125,183,255,.72) 0 2px, transparent 3px 13px), linear-gradient(90deg, rgba(239,107,98,.24), transparent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .mini-burst::before {
+      background: conic-gradient(from 20deg, var(--coral), transparent, var(--gold), transparent, var(--green), transparent, var(--coral));
+      animation: spin 4s linear infinite reverse;
+    }
+
+    .mini-constellation::before {
+      background:
+        radial-gradient(circle at 20% 35%, var(--sky) 0 3px, transparent 4px),
+        radial-gradient(circle at 52% 25%, var(--green) 0 3px, transparent 4px),
+        radial-gradient(circle at 78% 58%, var(--gold) 0 3px, transparent 4px),
+        linear-gradient(30deg, transparent 30%, rgba(125,183,255,.34), transparent 62%);
+      animation: floaty 3.4s ease-in-out infinite alternate;
     }
 
     .effect-card h3 {
@@ -248,32 +400,114 @@
       margin: 0;
       color: var(--muted);
       font-size: 13px;
-      line-height: 1.55;
+      line-height: 1.58;
+    }
+
+    .works {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .work-card,
+    .profile,
+    .timeline,
+    .contact-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .work-visual {
+      height: 170px;
+      position: relative;
+      overflow: hidden;
+      background: #0b0f12;
+    }
+
+    .work-visual.canvas-kit {
+      background:
+        radial-gradient(circle at 30% 25%, rgba(79,208,176,.78), transparent 22%),
+        radial-gradient(circle at 72% 60%, rgba(239,107,98,.55), transparent 24%),
+        #0b0f12;
+    }
+
+    .work-visual.motion-ui {
+      background:
+        linear-gradient(135deg, rgba(125,183,255,.55), transparent 45%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 1px, transparent 1px 18px),
+        #0b0f12;
+    }
+
+    .work-visual.page-system {
+      background:
+        linear-gradient(90deg, rgba(244,193,93,.52), transparent 34%),
+        linear-gradient(180deg, rgba(79,208,176,.28), transparent 58%),
+        #0b0f12;
+    }
+
+    .work-visual::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 7px;
+      transform: rotate(-2deg);
+    }
+
+    .work-body { padding: 18px; }
+
+    .work-body h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .work-body p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .work-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .about-grid {
       display: grid;
-      grid-template-columns: .8fr 1.2fr;
-      gap: 18px;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 16px;
     }
 
-    .profile, .timeline {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      padding: 20px;
-    }
+    .profile,
+    .timeline,
+    .contact-box { padding: 22px; }
 
     .avatar {
-      width: 92px;
-      height: 92px;
+      width: 96px;
+      height: 96px;
       border-radius: 8px;
       margin-bottom: 18px;
-      background:
-        radial-gradient(circle at 35% 35%, #ffe0a3 0 13%, transparent 14%),
-        linear-gradient(135deg, #53d1b6, #f26b6b);
       position: relative;
       overflow: hidden;
+      background:
+        radial-gradient(circle at 34% 30%, #ffe2a0 0 13%, transparent 14%),
+        linear-gradient(135deg, var(--green), var(--coral));
     }
 
     .avatar::after {
@@ -281,38 +515,57 @@
       position: absolute;
       inset: 48% 18% 12%;
       border-radius: 999px 999px 12px 12px;
-      background: rgba(16,18,20,.55);
+      background: rgba(15,17,20,.56);
     }
 
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .tag {
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.08);
-      color: var(--muted);
-      font-size: 13px;
+    .profile h3,
+    .timeline h3,
+    .contact-box h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
     }
 
     .timeline ol {
       list-style: none;
-      padding: 0;
-      margin: 0;
       display: grid;
       gap: 14px;
+      padding: 0;
+      margin: 0;
     }
 
     .timeline li {
       padding-left: 18px;
-      border-left: 2px solid var(--accent);
+      border-left: 2px solid var(--green);
       color: var(--muted);
       line-height: 1.65;
     }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .contact-links {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 46px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      background: rgba(255,255,255,.04);
+    }
+
+    .contact-link:hover { border-color: rgba(79,208,176,.7); }
 
     footer {
       padding: 46px 0;
@@ -320,124 +573,163 @@
       border-top: 1px solid var(--line);
     }
 
-    .mini-orbit::before,
-    .mini-grid::before,
-    .mini-wave::before,
-    .mini-burst::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-    }
-
-    .mini-orbit::before {
-      background:
-        radial-gradient(circle at 50% 50%, var(--accent) 0 5px, transparent 6px),
-        conic-gradient(from 0deg, transparent, rgba(83,209,182,.6), transparent 35%);
-      animation: spin 3s linear infinite;
-    }
-
-    .mini-grid::before {
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-        radial-gradient(circle at 50% 50%, rgba(255,204,102,.65), transparent 38%);
-      background-size: 18px 18px, 18px 18px, 100% 100%;
-      animation: drift 3s ease-in-out infinite alternate;
-    }
-
-    .mini-wave::before {
-      background:
-        repeating-radial-gradient(circle at 20% 50%, rgba(83,209,182,.7) 0 2px, transparent 3px 13px),
-        linear-gradient(90deg, rgba(242,107,107,.24), transparent);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    .mini-burst::before {
-      background:
-        conic-gradient(from 20deg, var(--accent-3), transparent, var(--accent-2), transparent, var(--accent-3));
-      filter: blur(1px);
-      animation: spin 4s linear infinite reverse;
-    }
-
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes drift { to { transform: translate(12px, -8px) scale(1.08); } }
     @keyframes pulse { 50% { transform: scale(1.16); opacity: .72; } }
+    @keyframes floaty { to { transform: translateY(-8px) scale(1.05); } }
+    @keyframes pulseDot { 50% { opacity: .42; transform: scale(.7); } }
 
-    @media (max-width: 920px) {
-      .hero, .about-grid {
+    .sunrise-demo {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .sunrise-stage {
+      position: relative;
+      min-height: 390px;
+      background: #090c0f;
+      overflow: hidden;
+    }
+
+    #sunriseSketch {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 390px;
+      cursor: crosshair;
+    }
+
+    .sunrise-badge {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 11px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 8px;
+      background: rgba(9,12,15,.58);
+      color: var(--text);
+      backdrop-filter: blur(12px);
+      font-size: 13px;
+    }
+
+    .sunrise-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px;
+      border-left: 1px solid var(--line);
+    }
+
+    .sunrise-info h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .sunrise-info p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sunrise-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sunrise-controls .btn {
+      min-height: 40px;
+      padding: 0 14px;
+    }
+    @media (max-width: 980px) {
+      .hero,
+      .about-grid,
+      .contact-grid,
+      .sunrise-demo {
         grid-template-columns: 1fr;
       }
 
-      .hero {
-        padding-top: 104px;
-      }
-
-      .showcase {
-        min-height: 320px;
-      }
-
-      .effects {
+      .effects,
+      .works {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stage-wrap,
+      #stage,
+      #sunriseSketch {
+        min-height: 420px;
       }
     }
 
-    @media (max-width: 560px) {
-      .shell, .nav {
-        width: min(100% - 20px, 1180px);
-      }
-
-      .nav a {
-        display: none;
-      }
-
-      .hero {
-        gap: 26px;
-      }
-
-      h1 {
-        font-size: 42px;
-      }
-
-      .lead {
-        font-size: 16px;
-      }
-
-      .effects {
-        grid-template-columns: 1fr;
-      }
-
-      .section-head {
-        display: block;
-      }
-
-      .hint {
-        margin-top: 8px;
-      }
+    @media (max-width: 640px) {
+      .shell,
+      .nav { width: min(100% - 20px, 1180px); }
+      .links a:not(:last-child) { display: none; }
+      .hero { padding-top: 104px; gap: 28px; }
+      h1 { font-size: 42px; }
+      .lead { font-size: 16px; }
+      .metrics,
+      .effects,
+      .works { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .section-head .hint { margin-top: 8px; }
+      .stage-panel { align-items: stretch; flex-direction: column; }
+      .sunrise-info { border-left: 0; border-top: 1px solid var(--line); }
+      .stage-tools { width: 100%; }
+      .icon-btn { width: 100%; }
     }
   </style>
 </head>
 <body>
   <nav class="nav" aria-label="主导航">
-    <div class="brand"><span class="mark" aria-hidden="true"></span><span>Web Motion Lab</span></div>
-    <div>
+    <div class="brand"><span class="mark" aria-hidden="true"></span><span>Web Effect Lab</span></div>
+    <div class="links">
       <a href="#effects">动画</a>
+      <a href="#works">作品</a>
       <a href="#about">关于</a>
-      <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://github.com/xixi2021111/web-effect" target="_blank" rel="noreferrer">GitHub</a>
     </div>
   </nav>
 
   <header class="shell hero">
     <div>
-      <h1>你好，我是前端创作者。</h1>
-      <p class="lead">这里是我的个人页面和 Web 动画实验室。点击下方不同效果，可以在主舞台里实时切换粒子、波纹、网格和爆发动画。</p>
+      <div class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>个人主页 · Web 动画实验室</div>
+      <h1>把网页做成可以被点击、感知和记住的东西。</h1>
+      <p class="lead">这里展示我的前端实验：Canvas 粒子、鼠标交互、响应式页面和可扩展的作品卡片。它适合放在 GitHub Pages 上，作为个人主页和动画效果入口。</p>
       <div class="hero-actions">
         <a class="btn primary" href="#effects">查看动画效果</a>
-        <a class="btn" href="#about">了解我</a>
+        <a class="btn" href="#works">浏览作品集</a>
+      </div>
+      <div class="metrics" aria-label="页面亮点">
+        <div class="metric"><strong>5</strong><span>个实时动画模式</span></div>
+        <div class="metric"><strong>0</strong><span>依赖，纯静态部署</span></div>
+        <div class="metric"><strong>100%</strong><span>适配 GitHub Pages</span></div>
       </div>
     </div>
-    <div class="showcase" aria-label="动画预览舞台">
+
+    <div class="stage-wrap" aria-label="动画预览舞台">
       <canvas id="stage"></canvas>
-      <div class="stage-label"><span class="dot"></span><span id="stageName">Orbit 粒子轨道</span></div>
+      <div class="stage-panel">
+        <div class="stage-title">
+          <strong id="stageName">Orbit 粒子轨道</strong>
+          <span id="stageDesc">多层粒子沿中心旋转，适合作为首屏视觉。</span>
+        </div>
+        <div class="stage-tools" aria-label="动画控制">
+          <button class="icon-btn" type="button" id="randomEffect" title="随机切换">↻</button>
+          <button class="icon-btn" type="button" id="sparkEffect" title="触发粒子">✦</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -445,62 +737,151 @@
     <section id="effects">
       <div class="section-head">
         <h2>可点击动画效果</h2>
-        <p class="hint">每张卡片都是一个独立视觉方向，适合扩展成作品集项目。</p>
+        <p class="hint">点击卡片会切换右上方主舞台；移动鼠标或点击舞台，可以看到更强的反馈。</p>
       </div>
       <div class="effects" role="list">
         <button class="effect-card active" type="button" data-effect="orbit" role="listitem">
           <div class="thumb mini-orbit" aria-hidden="true"></div>
           <h3>Orbit 粒子轨道</h3>
-          <p>点阵沿中心旋转，适合科技感封面和加载动效。</p>
+          <p>点阵沿中心旋转，适合科技感封面、Loading 和视觉主 KV。</p>
         </button>
         <button class="effect-card" type="button" data-effect="grid" role="listitem">
           <div class="thumb mini-grid" aria-hidden="true"></div>
           <h3>Magnetic 网格</h3>
-          <p>网格会被鼠标吸引，适合作品入口和互动背景。</p>
+          <p>网格会被鼠标吸引，适合作品入口、工具背景和交互首页。</p>
         </button>
         <button class="effect-card" type="button" data-effect="wave" role="listitem">
           <div class="thumb mini-wave" aria-hidden="true"></div>
           <h3>Liquid 波纹</h3>
-          <p>柔和波形持续流动，适合音乐、视觉和品牌页面。</p>
+          <p>柔和波形持续流动，适合音乐、视觉、品牌和情绪化页面。</p>
         </button>
         <button class="effect-card" type="button" data-effect="burst" role="listitem">
           <div class="thumb mini-burst" aria-hidden="true"></div>
           <h3>Click 爆发</h3>
-          <p>点击舞台产生彩色粒子，适合按钮反馈和节日彩蛋。</p>
+          <p>点击舞台产生彩色粒子，适合按钮反馈、庆祝效果和节日彩蛋。</p>
         </button>
+        <button class="effect-card" type="button" data-effect="constellation" role="listitem">
+          <div class="thumb mini-constellation" aria-hidden="true"></div>
+          <h3>Constellation 星图</h3>
+          <p>节点自动连线并跟随鼠标变化，适合个人首页和数据类展示。</p>
+        </button>
+      </div>
+    </section>
+
+    <section id="works">
+      <div class="section-head">
+        <h2>作品展示</h2>
+        <p class="hint">这些是预留的作品集入口，后续可以换成真实项目链接、源码地址或在线 Demo。</p>
+      </div>
+      <article class="sunrise-demo" aria-label="日出水波雾效展示">
+        <div class="sunrise-stage">
+          <canvas id="sunriseSketch"></canvas>
+          <div class="sunrise-badge"><span class="pulse-dot" aria-hidden="true"></span>p5 style sketch · sunrise ripple fog</div>
+        </div>
+        <div class="sunrise-info">
+          <div>
+            <h3>日出水波雾效</h3>
+            <p>用类似 p5.js 的 setup / draw 思路写的实时场景：太阳从水线升起，水面有多层正弦波，点击会扩散涟漪，薄雾在前景缓慢漂移。</p>
+          </div>
+          <div>
+            <div class="work-meta">
+              <span class="tag">水波纹</span>
+              <span class="tag">雾效</span>
+              <span class="tag">日出</span>
+              <span class="tag">Canvas</span>
+            </div>
+            <div class="sunrise-controls" style="margin-top:16px">
+              <button class="btn primary" type="button" id="sunriseRipple">制造涟漪</button>
+              <button class="btn" type="button" id="sunriseReset">重置日出</button>
+            </div>
+          </div>
+        </div>
+      </article>
+      <div class="works">
+        <article class="work-card">
+          <div class="work-visual canvas-kit" aria-hidden="true"></div>
+          <div class="work-body">
+            <h3>Canvas 动画组件库</h3>
+            <p>沉淀常用粒子、线条、波纹和点击反馈，方便快速组合成页面主视觉。</p>
+            <div class="work-meta"><span class="tag">Canvas</span><span class="tag">Motion</span><span class="tag">组件化</span></div>
+          </div>
+        </article>
+        <article class="work-card">
+          <div class="work-visual motion-ui" aria-hidden="true"></div>
+          <div class="work-body">
+            <h3>交互式个人首页</h3>
+            <p>把个人介绍、项目展示和动画实验融合在一个轻量页面里，适合 GitHub Pages。</p>
+            <div class="work-meta"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">GitHub Pages</span></div>
+          </div>
+        </article>
+        <article class="work-card">
+          <div class="work-visual page-system" aria-hidden="true"></div>
+          <div class="work-body">
+            <h3>视觉落地页模板</h3>
+            <p>为活动页、作品页和工具页准备一套可复用结构，突出首屏视觉和行动入口。</p>
+            <div class="work-meta"><span class="tag">响应式</span><span class="tag">模板</span><span class="tag">设计系统</span></div>
+          </div>
+        </article>
       </div>
     </section>
 
     <section id="about">
       <div class="section-head">
-        <h2>关于这个页面</h2>
-        <p class="hint">替换文字、GitHub 链接和项目介绍后，就能当个人主页使用。</p>
+        <h2>关于我</h2>
+        <p class="hint">这里可以替换成你的真实介绍、技术方向、博客链接和联系方式。</p>
       </div>
       <div class="about-grid">
         <article class="profile">
           <div class="avatar" aria-hidden="true"></div>
-          <h3>你的名字</h3>
-          <p class="hint">专注于 Web 体验、交互动画和有质感的小工具。喜欢把想法做成可以直接点开的网页。</p>
-          <div class="tags">
+          <h3>xixi2021111</h3>
+          <p class="hint">前端学习者 / Web 动画爱好者，喜欢把页面做得更有反馈、更有节奏，也更容易被分享。</p>
+          <div class="work-meta">
             <span class="tag">HTML</span>
             <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
             <span class="tag">Canvas</span>
-            <span class="tag">GitHub Pages</span>
           </div>
         </article>
         <article class="timeline">
+          <h3>接下来可以继续完善</h3>
           <ol>
-            <li><strong>个人介绍：</strong>一句话说明你是谁、做什么、正在探索什么。</li>
-            <li><strong>项目展示：</strong>把动画效果扩展成多个项目入口，链接到源码或在线 Demo。</li>
-            <li><strong>联系方式：</strong>放 GitHub、邮箱、博客、B 站或其他平台链接。</li>
+            <li><strong>换成真实头像和名字：</strong>让首页第一眼就有个人识别度。</li>
+            <li><strong>添加项目链接：</strong>每张作品卡片都可以跳转到源码、Demo 或文章。</li>
+            <li><strong>拆分动画页面：</strong>把每个动画效果做成独立详情页，形成完整作品集。</li>
           </ol>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-head">
+        <h2>联系与发布</h2>
+        <p class="hint">页面已经按静态站点设计，推到 GitHub 后开启 Pages 就可以公开访问。</p>
+      </div>
+      <div class="contact-grid">
+        <article class="contact-box">
+          <h3>找到我</h3>
+          <p class="hint">你可以把这里改成邮箱、博客、社交平台或任何想展示的入口。</p>
+          <div class="contact-links">
+            <a class="contact-link" href="https://github.com/xixi2021111" target="_blank" rel="noreferrer"><span>GitHub</span><span>打开</span></a>
+            <a class="contact-link" href="mailto:xixily2021@gmail.com"><span>Email</span><span>发送</span></a>
+          </div>
+        </article>
+        <article class="contact-box">
+          <h3>部署方式</h3>
+          <p class="hint">仓库推送后，在 GitHub 仓库 Settings 里开启 Pages，选择 main 分支和根目录即可。这个页面不需要构建命令。</p>
+          <div class="work-meta">
+            <span class="tag">main 分支</span>
+            <span class="tag">根目录</span>
+            <span class="tag">index.html</span>
+          </div>
         </article>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="shell">© <span id="year"></span> Web Motion Lab. Built for GitHub Pages.</div>
+    <div class="shell">© <span id="year"></span> Web Effect Lab. Built for GitHub Pages.</div>
   </footer>
 
   <script>
@@ -508,11 +889,16 @@
     const ctx = canvas.getContext("2d");
     const cards = [...document.querySelectorAll(".effect-card")];
     const stageName = document.querySelector("#stageName");
-    const names = {
-      orbit: "Orbit 粒子轨道",
-      grid: "Magnetic 网格",
-      wave: "Liquid 波纹",
-      burst: "Click 爆发"
+    const stageDesc = document.querySelector("#stageDesc");
+    const randomEffect = document.querySelector("#randomEffect");
+    const sparkEffect = document.querySelector("#sparkEffect");
+
+    const effects = {
+      orbit: ["Orbit 粒子轨道", "多层粒子沿中心旋转，适合作为首屏视觉。"],
+      grid: ["Magnetic 网格", "鼠标靠近时网格产生吸附和漂移。"],
+      wave: ["Liquid 波纹", "多层曲线叠加出柔和流动感。"],
+      burst: ["Click 爆发", "点击舞台触发彩色粒子扩散。"],
+      constellation: ["Constellation 星图", "节点自动连线，并跟随鼠标生成视觉重心。"]
     };
 
     let effect = "orbit";
@@ -521,8 +907,164 @@
     let time = 0;
     let pointer = { x: .5, y: .5, active: false };
     let bursts = [];
+    let stars = [];
 
     document.querySelector("#year").textContent = new Date().getFullYear();
+    const sunriseCanvas = document.querySelector("#sunriseSketch");
+    const sunriseCtx = sunriseCanvas.getContext("2d");
+    const sunriseRippleButton = document.querySelector("#sunriseRipple");
+    const sunriseResetButton = document.querySelector("#sunriseReset");
+    let sunriseWidth = 0;
+    let sunriseHeight = 0;
+    let sunriseTime = 0;
+    let sunriseProgress = 0;
+    let sunriseRipples = [];
+    let sunriseFog = [];
+
+    function sunriseSetup() {
+      const rect = sunriseCanvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      sunriseWidth = Math.max(1, Math.floor(rect.width));
+      sunriseHeight = Math.max(1, Math.floor(rect.height));
+      sunriseCanvas.width = Math.floor(sunriseWidth * dpr);
+      sunriseCanvas.height = Math.floor(sunriseHeight * dpr);
+      sunriseCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      sunriseFog = Array.from({ length: 14 }, (_, index) => ({
+        x: (index * 91) % Math.max(sunriseWidth, 1),
+        y: sunriseHeight * (.22 + (index % 7) * .045),
+        speed: .16 + (index % 5) * .035,
+        size: 90 + (index % 4) * 36,
+        alpha: .06 + (index % 5) * .018
+      }));
+    }
+
+    function sunriseReset() {
+      sunriseTime = 0;
+      sunriseProgress = 0;
+      sunriseRipples = [];
+    }
+
+    function addSunriseRipple(x = sunriseWidth * .5, y = sunriseHeight * .66) {
+      sunriseRipples.push({ x, y, radius: 6, life: 1, strength: 1 });
+    }
+
+    function drawSunriseSky() {
+      const horizon = sunriseHeight * .56;
+      const sky = sunriseCtx.createLinearGradient(0, 0, 0, horizon);
+      sky.addColorStop(0, "#17233d");
+      sky.addColorStop(.42, "#c0636c");
+      sky.addColorStop(.76, "#f3a35d");
+      sky.addColorStop(1, "#ffe0a3");
+      sunriseCtx.fillStyle = sky;
+      sunriseCtx.fillRect(0, 0, sunriseWidth, horizon + 8);
+
+      const sunX = sunriseWidth * .5;
+      const sunY = horizon + 56 - sunriseProgress * 118;
+      const glow = sunriseCtx.createRadialGradient(sunX, sunY, 10, sunX, sunY, sunriseWidth * .42);
+      glow.addColorStop(0, "rgba(255,230,164,.72)");
+      glow.addColorStop(.22, "rgba(244,193,93,.34)");
+      glow.addColorStop(1, "rgba(244,193,93,0)");
+      sunriseCtx.fillStyle = glow;
+      sunriseCtx.fillRect(0, 0, sunriseWidth, horizon + 30);
+
+      sunriseCtx.fillStyle = "#ffe0a3";
+      sunriseCtx.beginPath();
+      sunriseCtx.arc(sunX, sunY, 42, 0, Math.PI * 2);
+      sunriseCtx.fill();
+
+      sunriseCtx.fillStyle = "rgba(12,18,22,.72)";
+      sunriseCtx.beginPath();
+      sunriseCtx.moveTo(0, horizon + 6);
+      for (let x = 0; x <= sunriseWidth; x += 28) {
+        const y = horizon - 18 - Math.sin(x * .016 + 1.4) * 16 - Math.sin(x * .041) * 7;
+        sunriseCtx.lineTo(x, y);
+      }
+      sunriseCtx.lineTo(sunriseWidth, horizon + 32);
+      sunriseCtx.lineTo(0, horizon + 32);
+      sunriseCtx.closePath();
+      sunriseCtx.fill();
+    }
+
+    function drawSunriseWater() {
+      const horizon = sunriseHeight * .56;
+      const water = sunriseCtx.createLinearGradient(0, horizon, 0, sunriseHeight);
+      water.addColorStop(0, "#26445a");
+      water.addColorStop(.52, "#12313d");
+      water.addColorStop(1, "#081216");
+      sunriseCtx.fillStyle = water;
+      sunriseCtx.fillRect(0, horizon, sunriseWidth, sunriseHeight - horizon);
+
+      for (let layer = 0; layer < 18; layer++) {
+        const yBase = horizon + 14 + layer * 13;
+        sunriseCtx.beginPath();
+        for (let x = 0; x <= sunriseWidth; x += 8) {
+          let wave = Math.sin(x * .028 + sunriseTime * (1.2 + layer * .03) + layer) * (5 + layer * .18);
+          wave += Math.sin(x * .071 - sunriseTime * 1.9) * 2.2;
+          sunriseRipples.forEach((ripple) => {
+            const distance = Math.hypot(x - ripple.x, yBase - ripple.y);
+            wave += Math.sin(distance * .12 - ripple.radius * .22) * 10 * ripple.life * Math.exp(-distance / 210);
+          });
+          const y = yBase + wave;
+          if (x === 0) sunriseCtx.moveTo(x, y);
+          else sunriseCtx.lineTo(x, y);
+        }
+        const alpha = Math.max(.05, .26 - layer * .01);
+        sunriseCtx.strokeStyle = layer % 3 === 0 ? `rgba(255,224,163,${alpha})` : `rgba(125,183,255,${alpha})`;
+        sunriseCtx.lineWidth = layer < 4 ? 1.6 : 1;
+        sunriseCtx.stroke();
+      }
+
+      const reflection = sunriseCtx.createLinearGradient(0, horizon, 0, sunriseHeight);
+      reflection.addColorStop(0, "rgba(255,224,163,.38)");
+      reflection.addColorStop(.5, "rgba(244,193,93,.08)");
+      reflection.addColorStop(1, "rgba(244,193,93,0)");
+      sunriseCtx.fillStyle = reflection;
+      sunriseCtx.beginPath();
+      sunriseCtx.moveTo(sunriseWidth * .42, horizon);
+      sunriseCtx.lineTo(sunriseWidth * .58, horizon);
+      sunriseCtx.lineTo(sunriseWidth * .68, sunriseHeight);
+      sunriseCtx.lineTo(sunriseWidth * .32, sunriseHeight);
+      sunriseCtx.closePath();
+      sunriseCtx.fill();
+    }
+
+    function drawSunriseFog() {
+      sunriseFog.forEach((fog, index) => {
+        fog.x += fog.speed;
+        if (fog.x - fog.size > sunriseWidth) fog.x = -fog.size;
+        const y = fog.y + Math.sin(sunriseTime * .45 + index) * 8;
+        const mist = sunriseCtx.createRadialGradient(fog.x, y, 4, fog.x, y, fog.size);
+        mist.addColorStop(0, `rgba(244,240,231,${fog.alpha})`);
+        mist.addColorStop(.58, `rgba(244,240,231,${fog.alpha * .42})`);
+        mist.addColorStop(1, "rgba(244,240,231,0)");
+        sunriseCtx.fillStyle = mist;
+        sunriseCtx.beginPath();
+        sunriseCtx.ellipse(fog.x, y, fog.size, fog.size * .24, Math.sin(index) * .08, 0, Math.PI * 2);
+        sunriseCtx.fill();
+      });
+    }
+
+    function sunriseDraw() {
+      sunriseTime += .016;
+      sunriseProgress = Math.min(1, sunriseProgress + .0018);
+      drawSunriseSky();
+      drawSunriseWater();
+      drawSunriseFog();
+      sunriseRipples.forEach((ripple) => {
+        ripple.radius += 2.6;
+        ripple.life -= .008;
+      });
+      sunriseRipples = sunriseRipples.filter((ripple) => ripple.life > 0);
+      requestAnimationFrame(sunriseDraw);
+    }
+
+    sunriseCanvas.addEventListener("click", (event) => {
+      const rect = sunriseCanvas.getBoundingClientRect();
+      addSunriseRipple(event.clientX - rect.left, event.clientY - rect.top);
+    });
+
+    sunriseRippleButton.addEventListener("click", () => addSunriseRipple());
+    sunriseResetButton.addEventListener("click", sunriseReset);
 
     function resize() {
       const rect = canvas.getBoundingClientRect();
@@ -532,10 +1074,25 @@
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      createStars();
+    }
+
+    function createStars() {
+      const count = Math.max(34, Math.floor((width * height) / 9800));
+      stars = Array.from({ length: count }, (_, index) => ({
+        x: (Math.sin(index * 12.9898) * 43758.5453 % 1 + 1) % 1 * width,
+        y: (Math.sin(index * 78.233) * 24634.6345 % 1 + 1) % 1 * height,
+        vx: Math.sin(index) * .28,
+        vy: Math.cos(index * 1.7) * .28
+      }));
     }
 
     function clear() {
-      ctx.fillStyle = "#0b0d0f";
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, "#090c0f");
+      gradient.addColorStop(.55, "#10161a");
+      gradient.addColorStop(1, "#080a0d");
+      ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
     }
 
@@ -543,22 +1100,22 @@
       clear();
       const cx = width / 2;
       const cy = height / 2;
-      for (let ring = 0; ring < 5; ring++) {
-        const radius = 42 + ring * Math.min(width, height) * .085;
-        const count = 16 + ring * 8;
-        ctx.strokeStyle = `rgba(255,255,255,${.04 + ring * .012})`;
+      for (let ring = 0; ring < 6; ring++) {
+        const radius = 36 + ring * Math.min(width, height) * .072;
+        const count = 18 + ring * 7;
+        ctx.strokeStyle = `rgba(255,255,255,${.035 + ring * .012})`;
         ctx.beginPath();
         ctx.arc(cx, cy, radius, 0, Math.PI * 2);
         ctx.stroke();
         for (let i = 0; i < count; i++) {
-          const angle = time * (.35 + ring * .05) + i / count * Math.PI * 2 + ring;
-          const pulse = Math.sin(time * 2 + i) * 3;
+          const angle = time * (.32 + ring * .045) + i / count * Math.PI * 2 + ring;
+          const pulse = Math.sin(time * 2 + i) * 3.5;
           const x = cx + Math.cos(angle) * (radius + pulse);
           const y = cy + Math.sin(angle) * (radius + pulse);
-          ctx.fillStyle = i % 3 === 0 ? "#53d1b6" : i % 3 === 1 ? "#ffcc66" : "#f26b6b";
-          ctx.globalAlpha = .45 + Math.sin(time + i) * .25;
+          ctx.fillStyle = i % 4 === 0 ? "#4fd0b0" : i % 4 === 1 ? "#f4c15d" : i % 4 === 2 ? "#ef6b62" : "#7db7ff";
+          ctx.globalAlpha = .44 + Math.sin(time + i) * .24;
           ctx.beginPath();
-          ctx.arc(x, y, 2.2 + ring * .25, 0, Math.PI * 2);
+          ctx.arc(x, y, 2.2 + ring * .18, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -567,7 +1124,7 @@
 
     function drawGrid() {
       clear();
-      const gap = 28;
+      const gap = Math.max(24, Math.min(width, height) / 17);
       const mx = pointer.x * width;
       const my = pointer.y * height;
       for (let x = gap; x < width; x += gap) {
@@ -575,12 +1132,13 @@
           const dx = mx - x;
           const dy = my - y;
           const dist = Math.hypot(dx, dy);
-          const pull = Math.max(0, 1 - dist / 190) * (pointer.active ? 20 : 10);
-          const px = x + dx / Math.max(dist, 1) * pull + Math.sin(time + y * .02) * 2;
-          const py = y + dy / Math.max(dist, 1) * pull + Math.cos(time + x * .02) * 2;
-          ctx.fillStyle = dist < 150 ? "#ffcc66" : "rgba(243,240,232,.42)";
+          const pull = Math.max(0, 1 - dist / 210) * (pointer.active ? 26 : 10);
+          const px = x + dx / Math.max(dist, 1) * pull + Math.sin(time + y * .02) * 2.2;
+          const py = y + dy / Math.max(dist, 1) * pull + Math.cos(time + x * .02) * 2.2;
+          ctx.fillStyle = dist < 160 ? "#f4c15d" : "rgba(244,240,231,.42)";
           ctx.beginPath();
-          ctx.roundRect(px - 2, py - 2, 4, 4, 1.5);
+          if (ctx.roundRect) ctx.roundRect(px - 2, py - 2, 4, 4, 1.5);
+          else ctx.rect(px - 2, py - 2, 4, 4);
           ctx.fill();
         }
       }
@@ -588,34 +1146,32 @@
 
     function drawWave() {
       clear();
-      const lines = 9;
+      const lines = 11;
       for (let j = 0; j < lines; j++) {
-        const yBase = height * (.2 + j / lines * .66);
+        const yBase = height * (.16 + j / lines * .7);
         ctx.beginPath();
         for (let x = 0; x <= width; x += 8) {
-          const amp = 16 + j * 2;
-          const y = yBase
-            + Math.sin(x * .018 + time * 1.8 + j) * amp
-            + Math.sin(x * .045 - time * 1.2) * 7;
+          const amp = 14 + j * 1.8;
+          const y = yBase + Math.sin(x * .017 + time * 1.8 + j) * amp + Math.sin(x * .044 - time * 1.2) * 7;
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = j % 3 === 0 ? "rgba(83,209,182,.8)" : j % 3 === 1 ? "rgba(255,204,102,.65)" : "rgba(242,107,107,.55)";
+        ctx.strokeStyle = j % 4 === 0 ? "rgba(79,208,176,.82)" : j % 4 === 1 ? "rgba(125,183,255,.68)" : j % 4 === 2 ? "rgba(244,193,93,.62)" : "rgba(239,107,98,.58)";
         ctx.lineWidth = 2;
         ctx.stroke();
       }
     }
 
     function spawnBurst(x, y) {
-      for (let i = 0; i < 42; i++) {
+      for (let i = 0; i < 44; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = 1.2 + Math.random() * 4.6;
+        const speed = 1.2 + Math.random() * 4.8;
         bursts.push({
           x, y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           life: 1,
-          color: ["#53d1b6", "#ffcc66", "#f26b6b", "#f3f0e8"][i % 4]
+          color: ["#4fd0b0", "#f4c15d", "#ef6b62", "#7db7ff", "#f4f0e7"][i % 5]
         });
       }
     }
@@ -624,12 +1180,12 @@
       clear();
       ctx.save();
       ctx.translate(width / 2, height / 2);
-      for (let i = 0; i < 18; i++) {
-        ctx.rotate(Math.PI / 18);
-        ctx.strokeStyle = i % 2 ? "rgba(83,209,182,.18)" : "rgba(242,107,107,.16)";
-        ctx.lineWidth = 6;
+      for (let i = 0; i < 24; i++) {
+        ctx.rotate(Math.PI / 24);
+        ctx.strokeStyle = i % 3 === 0 ? "rgba(79,208,176,.18)" : i % 3 === 1 ? "rgba(239,107,98,.16)" : "rgba(244,193,93,.14)";
+        ctx.lineWidth = 5;
         ctx.beginPath();
-        ctx.moveTo(30 + Math.sin(time + i) * 8, 0);
+        ctx.moveTo(28 + Math.sin(time + i) * 9, 0);
         ctx.lineTo(Math.min(width, height) * .44, 0);
         ctx.stroke();
       }
@@ -638,18 +1194,56 @@
         p.x += p.vx;
         p.y += p.vy;
         p.vy += .035;
-        p.life -= .015;
+        p.life -= .014;
         ctx.globalAlpha = Math.max(0, p.life);
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 4 * p.life, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 4.3 * p.life, 0, Math.PI * 2);
         ctx.fill();
       });
       ctx.globalAlpha = 1;
       bursts = bursts.filter((p) => p.life > 0);
-      if (bursts.length < 16 && Math.floor(time * 2) % 2 === 0) {
+      if (bursts.length < 12 && Math.floor(time * 2) % 2 === 0) {
         spawnBurst(width * (.38 + Math.sin(time) * .18), height * (.45 + Math.cos(time * .7) * .18));
       }
+    }
+
+    function drawConstellation() {
+      clear();
+      const mx = pointer.x * width;
+      const my = pointer.y * height;
+      stars.forEach((star, index) => {
+        star.x += star.vx + Math.sin(time + index) * .05;
+        star.y += star.vy + Math.cos(time + index) * .05;
+        if (star.x < 0 || star.x > width) star.vx *= -1;
+        if (star.y < 0 || star.y > height) star.vy *= -1;
+        star.x = Math.max(0, Math.min(width, star.x));
+        star.y = Math.max(0, Math.min(height, star.y));
+      });
+      for (let i = 0; i < stars.length; i++) {
+        for (let j = i + 1; j < stars.length; j++) {
+          const a = stars[i];
+          const b = stars[j];
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          if (dist < 118) {
+            ctx.globalAlpha = (1 - dist / 118) * .36;
+            ctx.strokeStyle = "#7db7ff";
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      stars.forEach((star, index) => {
+        const dist = Math.hypot(star.x - mx, star.y - my);
+        ctx.globalAlpha = dist < 180 ? .95 : .62;
+        ctx.fillStyle = index % 3 === 0 ? "#4fd0b0" : index % 3 === 1 ? "#7db7ff" : "#f4c15d";
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, dist < 160 ? 2.8 : 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
     }
 
     function frame() {
@@ -658,18 +1252,28 @@
       if (effect === "grid") drawGrid();
       if (effect === "wave") drawWave();
       if (effect === "burst") drawBurst();
+      if (effect === "constellation") drawConstellation();
       requestAnimationFrame(frame);
     }
 
     function setEffect(next) {
       effect = next;
-      stageName.textContent = names[next];
+      stageName.textContent = effects[next][0];
+      stageDesc.textContent = effects[next][1];
       cards.forEach((card) => card.classList.toggle("active", card.dataset.effect === next));
       if (next === "burst") spawnBurst(width / 2, height / 2);
     }
 
-    cards.forEach((card) => {
-      card.addEventListener("click", () => setEffect(card.dataset.effect));
+    cards.forEach((card) => card.addEventListener("click", () => setEffect(card.dataset.effect)));
+
+    randomEffect.addEventListener("click", () => {
+      const keys = Object.keys(effects).filter((key) => key !== effect);
+      setEffect(keys[Math.floor(Math.random() * keys.length)]);
+    });
+
+    sparkEffect.addEventListener("click", () => {
+      spawnBurst(width / 2, height / 2);
+      if (effect !== "burst") setEffect("burst");
     });
 
     canvas.addEventListener("pointermove", (event) => {
@@ -681,9 +1285,7 @@
       };
     });
 
-    canvas.addEventListener("pointerleave", () => {
-      pointer.active = false;
-    });
+    canvas.addEventListener("pointerleave", () => { pointer.active = false; });
 
     canvas.addEventListener("click", (event) => {
       const rect = canvas.getBoundingClientRect();
@@ -691,9 +1293,12 @@
       if (effect !== "burst") setEffect("burst");
     });
 
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", () => { resize(); sunriseSetup(); });
     resize();
+    sunriseSetup();
+    addSunriseRipple();
     frame();
+    sunriseDraw();
   </script>
 </body>
 </html>
