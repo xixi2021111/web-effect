@@ -225,6 +225,7 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
       background: #090c0f;
       box-shadow: var(--shadow);
     }
@@ -268,6 +269,7 @@
       font-size: 13px;
       white-space: nowrap;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
       text-overflow: ellipsis;
     }
 
@@ -331,6 +333,7 @@
       text-align: left;
       cursor: pointer;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
       transition: transform .22s ease, border-color .22s ease, background .22s ease;
     }
 
@@ -349,6 +352,7 @@
       margin-bottom: 14px;
       background: #0b0f12;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
     }
 
     .thumb::before,
@@ -409,6 +413,17 @@
       gap: 14px;
     }
 
+    .work-link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .work-link:hover {
+      border-color: rgba(244,193,93,.72);
+      transform: translateY(-3px);
+    }
+
     .work-card,
     .profile,
     .timeline,
@@ -417,12 +432,14 @@
       border-radius: 8px;
       background: var(--panel);
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
     }
 
     .work-visual {
       height: 170px;
       position: relative;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
       background: #0b0f12;
     }
 
@@ -505,6 +522,7 @@
       margin-bottom: 18px;
       position: relative;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
       background:
         radial-gradient(circle at 34% 30%, #ffe2a0 0 13%, transparent 14%),
         linear-gradient(135deg, var(--green), var(--coral));
@@ -610,6 +628,7 @@
       border-radius: 8px;
       background: var(--panel);
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
     }
 
     .sunrise-stage {
@@ -617,6 +636,7 @@
       min-height: 390px;
       background: #090c0f;
       overflow: hidden;
+      transition: transform .22s ease, border-color .22s ease;
     }
 
     #sunriseSketch {
@@ -823,14 +843,14 @@
         </div>
       </article>
       <div class="works">
-        <article class="work-card">
+        <a class="work-card work-link" href="galaxy.html" aria-label="打开星河线动画独立展示页">
           <div class="work-visual galaxy-line" aria-hidden="true"></div>
           <div class="work-body">
             <h3>星河线动画</h3>
             <p>用 Canvas 绘制流动的银河线带，加入闪烁五角星点缀，适合视觉主页、节日页和作品封面。</p>
-            <div class="work-meta"><span class="tag">Galaxy</span><span class="tag">五角星</span><span class="tag">Canvas 动画</span></div>
+            <div class="work-meta"><span class="tag">Galaxy</span><span class="tag">五角星</span><span class="tag">Canvas 动画</span><span class="tag">打开页面</span></div>
           </div>
-        </article>        <article class="work-card">
+        </a>        <article class="work-card">
           <div class="work-visual canvas-kit" aria-hidden="true"></div>
           <div class="work-body">
             <h3>Canvas 动画组件库</h3>
