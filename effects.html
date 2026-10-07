@@ -785,13 +785,13 @@
           <div class="thumb mini-galaxy" aria-hidden="true"></div>
           <h3>Galaxy 星河线</h3>
           <p>星点沿银河弧线流动，五角星闪烁旋转，鼠标会轻微牵引线带。</p>
-        </button>        <button class="effect-card" type="button" data-effect="constellation" role="listitem">
+        </button>
+        <button class="effect-card" type="button" data-effect="constellation" role="listitem">
           <div class="thumb mini-constellation" aria-hidden="true"></div>
           <h3>Constellation 星图</h3>
           <p>节点自动连线并跟随鼠标变化，适合个人首页和数据类展示。</p>
         </button>
-      </div>
-    </section>
+      </div>    </section>
 
     <section id="works">
       <div class="section-head">
@@ -1398,7 +1398,12 @@
       if (next === "burst") spawnBurst(width / 2, height / 2);
     }
 
-    cards.forEach((card) => card.addEventListener("click", () => setEffect(card.dataset.effect)));
+    cards.forEach((card) => {
+      card.addEventListener("click", (event) => {
+        event.preventDefault();
+        setEffect(card.dataset.effect);
+      });
+    });
 
     randomEffect.addEventListener("click", () => {
       const keys = Object.keys(effects).filter((key) => key !== effect);
